@@ -54,23 +54,17 @@ The score stratifies patients undergoing pelvic exenteration into risk groups fo
 """)
 
 # --- Input section ---
-st.header("Input Clinical Data")
+st.header("Clinical Data Entry")
 
-st.subheader("Disease-Free Survival (DFS)")
 margins = st.selectbox("Margins", ["negative", "positive"])
 lvsi = st.selectbox("LVSI", ["negative", "positive"])
 pe_type = st.selectbox("PE Type", ["anterior", "total"])
 lymphadenectomy = st.selectbox("Lymphadenectomy", ["yes", "no"])
-
-st.subheader("Overall Survival (OS)")
-margins_os = st.selectbox("Margins (OS)", ["negative", "positive"])
-lvsi_os = st.selectbox("LVSI (OS)", ["negative", "positive"])
-pe_type_os = st.selectbox("PE Type (OS)", ["anterior", "total"])
-timing = st.selectbox("Timing", ["naive", "persistence", "recurrence"])
+timing = st.selectbox("Timing (for OS)", ["naive", "persistence", "recurrence"])
 
 # --- Calculate scores ---
 dfs_score = corepex_dfs(margins, lvsi, pe_type, lymphadenectomy)
-os_score = corepex_os(margins_os, lvsi_os, pe_type_os, timing)
+os_score = corepex_os(margins, lvsi, pe_type, timing)
 
 dfs_group, dfs_color = risk_group(dfs_score)
 os_group, os_color = risk_group(os_score)
@@ -87,7 +81,6 @@ st.header("Visualizations")
 chart_type = st.selectbox("Select chart type", ["Kaplan-Meier (simulated)", "Bar chart", "Pie chart"])
 
 if chart_type == "Kaplan-Meier (simulated)":
-    # Simulated survival curves
     time = np.linspace(0, 60, 61)
     survival_low = np.exp(-time/80)
     survival_high = np.exp(-time/30)
