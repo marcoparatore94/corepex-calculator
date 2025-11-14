@@ -1,6 +1,4 @@
 import streamlit as st
-import matplotlib.pyplot as plt
-import numpy as np
 
 # --- COREPEX functions ---
 def corepex_dfs(margins, lvsi, pe_type, lymphadenectomy):
@@ -74,37 +72,3 @@ st.header("Results")
 
 st.markdown(f"<h3>DFS Score: {dfs_score} → <span style='color:{dfs_color}'>{dfs_group}</span></h3>", unsafe_allow_html=True)
 st.markdown(f"<h3>OS Score: {os_score} → <span style='color:{os_color}'>{os_group}</span></h3>", unsafe_allow_html=True)
-
-# --- Graphs section ---
-st.header("Visualizations")
-
-chart_type = st.selectbox("Select chart type", ["Kaplan-Meier (simulated)", "Bar chart", "Pie chart"])
-
-if chart_type == "Kaplan-Meier (simulated)":
-    time = np.linspace(0, 60, 61)
-    survival_low = np.exp(-time/80)
-    survival_high = np.exp(-time/30)
-
-    fig, ax = plt.subplots()
-    ax.plot(time, survival_low, label="Low risk", color="green")
-    ax.plot(time, survival_high, label="High risk", color="red")
-    ax.set_xlabel("Months")
-    ax.set_ylabel("Survival probability")
-    ax.set_title("Simulated Kaplan-Meier curves")
-    ax.legend()
-    st.pyplot(fig)
-
-elif chart_type == "Bar chart":
-    fig, ax = plt.subplots()
-    ax.bar(["DFS Score", "OS Score"], [dfs_score, os_score], color=["blue", "purple"])
-    ax.set_ylabel("Score")
-    ax.set_title("COREPEX Scores")
-    st.pyplot(fig)
-
-elif chart_type == "Pie chart":
-    labels = ["DFS", "OS"]
-    values = [dfs_score, os_score]
-    fig, ax = plt.subplots()
-    ax.pie(values, labels=labels, autopct="%1.1f%%", colors=["skyblue", "lightcoral"])
-    ax.set_title("Relative Scores")
-    st.pyplot(fig)
